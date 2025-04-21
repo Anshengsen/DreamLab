@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dream Lab</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    }
+    body {
+      display: flex;
+      height: 100vh;
+      background-color: #f9f9f9;
+    }
+    .sidebar {
+      width: 240px;
+      background-color: #fff;
+      border-right: 1px solid #e0e0e0;
+      padding: 20px;
+    }
+    .sidebar h2 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    .sidebar ul {
+      list-style: none;
+    }
+    .sidebar li {
+      padding: 10px 5px;
+      cursor: pointer;
+      border-radius: 8px;
+    }
+    .sidebar li:hover {
+      background-color: #eee;
+    }
+    .main {
+      flex: 1;
+      padding: 20px;
+      overflow-y: scroll;
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+    .card img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .card .prompt {
+      padding: 15px;
+      font-size: 14px;
+      color: #333;
+      white-space: pre-line;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>分类</h2>
+    <ul id="categoryList">
+      <li onclick="filterCategory('全部')">全部</li>
+      <li onclick="filterCategory('美少女')">美少女</li>
+      <li onclick="filterCategory('国潮国风')">国潮国风</li>
+    </ul>
+  </div>
+  <div class="main">
+    <div class="gallery" id="gallery"></div>
+  </div>
+
+  <script>
+    const data = [
+      {
+        thumb: "A-0698.png",
+        category: "案例咒语",
+        subcategory: "美少女",
+        prompt: "A young woman with royal blue hair and blue eyes, wearing a kimono, delicate lighting"
+      },
+      {
+        thumb: "A-0703.png",
+        category: "案例咒语",
+        subcategory: "国潮国风",
+        prompt: "A Chinese girl, long hair, traditional hanfu, standing by the lotus pond, soft background"
+      }
+    ];
+
+    const gallery = document.getElementById("gallery");
+    const categoryList = document.getElementById("categoryList");
+
+    function renderGallery(filter = "全部") {
+      gallery.innerHTML = "";
+      const filtered = filter === "全部" ? data : data.filter(d => d.subcategory === filter);
+      filtered.forEach(item => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <img src="images/${item.thumb}" alt="${item.subcategory}" />
+          <div class="prompt">${item.prompt}</div>
+        `;
+        gallery.appendChild(card);
+      });
+    }
+
+    function filterCategory(category) {
+      renderGallery(category);
+    }
+
+    // 初始化渲染
+    renderGallery();
+  </script>
+</body>
+</html>
