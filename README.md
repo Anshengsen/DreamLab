@@ -1,2 +1,0 @@
-# DreamLab
-Midjourney Prompt
