@@ -1,0 +1,30 @@
+name: Build Data
+
+on:
+  push:
+    paths:
+      - 'cases/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Generate JSON
+        run: |
+          node generate-data.js
+
+      - name: Commit & Push
+        run: |
+          git config user.name "GitHub Action"
+          git config user.email "action@github.com"
+          git add data.json
+          git commit -m "Auto-generate data.json" || echo "No changes"
+          git push
