@@ -57,21 +57,21 @@ header {
 
 /* 瀑布流布局 */
 .gallery {
-  column-count: 4;
-  column-gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 10px;
   padding: 20px;
 }
 
 .card {
-  width: 320px;
-  margin: 0 0 10px;
+  width: 360px;
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   overflow: hidden;
-  display: inline-block;
-  vertical-align: top;
-  break-inside: avoid;
+  display: flex;
+  flex-direction: column;
 }
 
 .card img {
@@ -124,12 +124,13 @@ header {
   border-color: #007bff;
 }
 
-/* 响应式 */
-@media (max-width: 1200px) {
+/* 响应式布局 */
+@media (max-width: 1400px) {
   .gallery {
-    column-count: 3;
+    justify-content: center;
   }
 }
+
 @media (max-width: 768px) {
   .container {
     flex-direction: column;
@@ -140,11 +141,12 @@ header {
     border-bottom: 1px solid #e0e0e0;
   }
   .gallery {
-    column-count: 2;
+    justify-content: center;
   }
 }
+
 @media (max-width: 480px) {
-  .gallery {
-    column-count: 1;
+  .card {
+    width: 90%;
   }
 }
