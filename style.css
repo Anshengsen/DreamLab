@@ -1,155 +1,118 @@
+/* 基础布局 */
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen;
-  background: #f8f9fa;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  background: #f7f9fb;
   color: #333;
 }
 
 header {
-  padding: 10px 20px;
-  background: #fff;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-#search-input {
-  width: 100%;
-  max-width: 600px;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-}
-
-.container {
-  display: flex;
-  min-height: calc(100vh - 60px);
-}
-
-.sidebar {
-  width: 240px;
-  background-color: #fff;
+  background: white;
   padding: 20px;
-  border-right: 1px solid #e0e0e0;
-  overflow-y: auto;
-}
-
-.sidebar h2 {
-  font-size: 18px;
-  margin-bottom: 10px;
-}
-
-.sidebar ul {
-  list-style: none;
-  padding: 0;
-}
-
-.sidebar li {
-  cursor: pointer;
-  margin-bottom: 10px;
-  padding: 5px 10px;
-  border-radius: 6px;
-  transition: background 0.2s;
-}
-
-.sidebar li:hover, .sidebar li.active {
-  background-color: #e8e8e8;
-}
-
-/* Gallery瀑布流布局 */
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-  gap: 20px;
-  padding: 20px;
-  align-items: start;
-}
-
-.card {
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   display: flex;
-  flex-direction: column;
-  transition: transform 0.3s ease;
-  opacity: 0;
-  transform: translateY(30px);
-  animation: fadeInUp 0.6s ease forwards;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
-@keyframes fadeInUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
+header h1 {
+  font-size: 24px;
+  margin: 0;
+  color: #2c3e50;
+}
+
+#searchInput {
+  width: 200px;
+  padding: 8px 12px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  outline: none;
+}
+
+main {
+  padding: 20px;
+}
+
+/* 瀑布流布局 */
+#gallery {
+  column-count: 4;
+  column-gap: 20px;
+}
+
+@media (max-width: 1200px) {
+  #gallery {
+    column-count: 3;
+  }
+}
+@media (max-width: 768px) {
+  #gallery {
+    column-count: 2;
+  }
+}
+@media (max-width: 480px) {
+  #gallery {
+    column-count: 1;
   }
 }
 
-.card:hover {
-  transform: scale(1.02);
+.card {
+  background: white;
+  margin: 0 0 20px;
+  display: inline-block;
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  overflow: hidden;
+  transition: all 0.3s ease;
 }
 
 .card img {
   width: 100%;
-  height: auto;
-  display: block;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-
-.card img.loaded {
-  opacity: 1;
-}
-
-.prompt {
-  padding: 10px 15px;
-  font-size: 14px;
-  color: #555;
-  white-space: pre-wrap;
-  display: none; /* 默认隐藏提示词 */
-}
-
-.prompt.expanded {
   display: block;
 }
 
-.expand-btn {
-  background: none;
-  border: none;
-  color: #007bff;
+.prompt-container {
+  padding: 15px;
+}
+
+.prompt-text {
+  display: none;
+  margin-top: 10px;
   font-size: 14px;
+  color: #666;
+  word-break: break-word;
+}
+
+.toggle-btn {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 14px;
+  color: #3498db;
   cursor: pointer;
-  margin: 10px 15px;
-  text-align: left;
 }
 
-.pagination {
+/* 分页 */
+#pagination {
   text-align: center;
-  padding: 20px;
+  margin-top: 30px;
 }
 
 .page-btn {
+  display: inline-block;
   margin: 0 5px;
   padding: 8px 12px;
-  border: 1px solid #ccc;
-  background: #fff;
-  border-radius: 6px;
+  background: white;
+  color: #3498db;
+  border: 1px solid #3498db;
+  border-radius: 8px;
   cursor: pointer;
+  transition: 0.3s;
 }
 
-.page-btn.active {
-  background: #007bff;
-  color: #fff;
-  border-color: #007bff;
-}
-
-/* 手机端适配 */
-@media (max-width: 768px) {
-  .container {
-    flex-direction: column;
-  }
-  .sidebar {
-    width: 100%;
-    border-right: none;
-    border-bottom: 1px solid #e0e0e0;
-  }
+.page-btn.active, .page-btn:hover {
+  background: #3498db;
+  color: white;
 }
