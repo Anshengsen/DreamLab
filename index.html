@@ -1,28 +1,24 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>DreamLab</title>
-  <link rel="icon" type="image/svg+xml" href="LOGO.svg" />
-  <link rel="stylesheet" href="style.css?v=6" />
+  <link rel="icon" href="LOGO.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <input type="text" id="search-input" placeholder="搜索提示词..." />
-  </header>
 
-  <div class="container">
-    <aside class="sidebar">
-      <h2>案例咒语</h2>
-      <ul id="category-list"></ul>
-    </aside>
+<header>
+  <h1>DreamLab</h1>
+  <input type="text" id="searchInput" placeholder="搜索提示词...">
+</header>
 
-    <main class="gallery" id="gallery"></main>
-  </div>
+<main>
+  <div id="gallery"></div>
+  <div id="pagination"></div>
+</main>
 
-  <div class="pagination" id="pagination"></div>
-
-  <script src="script.js?v=6"></script>
+<script src="script.js"></script>
 </body>
 </html>
