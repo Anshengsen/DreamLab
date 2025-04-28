@@ -1,108 +1,82 @@
-let data = [];
+let allData = [];
 let filteredData = [];
-let currentCategory = "";
 let currentPage = 1;
 const itemsPerPage = 50;
 
+// 加载数据
 async function fetchData() {
-  const res = await fetch("data.json");
-  data = await res.json();
-  filteredData = data;
-  renderCategories();
-  renderGallery();
-  renderPagination();
+  const response = await fetch('data.json');
+  allData = await response.json();
+  filteredData = allData;
+  render();
 }
 
-function renderCategories() {
-  const categories = [...new Set(data.map(item => item.category))];
-  const list = document.getElementById("category-list");
-  list.innerHTML = "";
-  categories.forEach(cat => {
-    const li = document.createElement("li");
-    li.textContent = cat;
-    li.onclick = () => {
-      currentCategory = cat;
-      currentPage = 1;
-      document.querySelectorAll(".sidebar li").forEach(el => el.classList.remove("active"));
-      li.classList.add("active");
-      filterData();
-    };
-    list.appendChild(li);
-  });
-}
-
-function filterData() {
-  filteredData = data.filter(item => {
-    return (!currentCategory || item.category === currentCategory);
-  });
-  const keyword = document.getElementById("search-input").value.trim().toLowerCase();
-  if (keyword) {
-    filteredData = filteredData.filter(item => item.prompt.toLowerCase().includes(keyword));
-  }
-  currentPage = 1;
-  renderGallery();
-  renderPagination();
-}
-
-function renderGallery() {
-  const gallery = document.getElementById("gallery");
-  gallery.innerHTML = "";
+function render() {
+  const gallery = document.getElementById('gallery');
+  gallery.innerHTML = '';
 
   const start = (currentPage - 1) * itemsPerPage;
   const end = start + itemsPerPage;
-  const pageItems = filteredData.slice(start, end);
+  const pageData = filteredData.slice(start, end);
 
-  pageItems.forEach(item => {
-    const card = document.createElement("div");
-    card.className = "card";
+  pageData.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'card';
 
-    const img = document.createElement("img");
-    img.src = item.image;
-    img.alt = "Preview";
+    card.innerHTML = `
+      <img src="${item.image}" alt="案例图片">
+      <div class="prompt-container">
+        <span class="toggle-btn">展开提示词</span>
+        <div class="prompt-text">${item.prompt}</div>
+      </div>
+    `;
 
-    img.onload = () => {
-      img.classList.add("loaded");
-    };
-
-    const prompt = document.createElement("div");
-    prompt.className = "prompt";
-    prompt.textContent = item.prompt;
-
-    const expandBtn = document.createElement("button");
-    expandBtn.className = "expand-btn";
-    expandBtn.textContent = "展开/收起提示词";
-    expandBtn.onclick = () => {
-      prompt.classList.toggle("expanded");
-    };
-
-    card.appendChild(img);
-    card.appendChild(expandBtn);
-    card.appendChild(prompt);
     gallery.appendChild(card);
   });
+
+  renderPagination();
+  setupToggleButtons();
 }
 
 function renderPagination() {
-  const pagination = document.getElementById("pagination");
-  pagination.innerHTML = "";
+  const pagination = document.getElementById('pagination');
+  pagination.innerHTML = '';
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
   for (let i = 1; i <= totalPages; i++) {
-    const btn = document.createElement("button");
-    btn.className = "page-btn";
+    const btn = document.createElement('span');
+    btn.className = 'page-btn' + (i === currentPage ? ' active' : '');
     btn.textContent = i;
-    if (i === currentPage) {
-      btn.classList.add("active");
-    }
     btn.onclick = () => {
       currentPage = i;
-      renderGallery();
-      renderPagination();
+      render();
+      window.scrollTo(0, 0);
     };
     pagination.appendChild(btn);
   }
 }
 
-document.getElementById("search-input").addEventListener("input", filterData);
+function setupToggleButtons() {
+  document.querySelectorAll('.toggle-btn').forEach(btn => {
+    btn.onclick = () => {
+      const prompt = btn.nextElementSibling;
+      if (prompt.style.display === 'block') {
+        prompt.style.display = 'none';
+        btn.textContent = '展开提示词';
+      } else {
+        prompt.style.display = 'block';
+        btn.textContent = '收起提示词';
+      }
+    };
+  });
+}
+
+document.getElementById('searchInput').addEventListener('input', e => {
+  const keyword = e.target.value.trim().toLowerCase();
+  filteredData = allData.filter(item => item.prompt.toLowerCase().includes(keyword));
+  currentPage = 1;
+  render();
+});
 
 fetchData();
