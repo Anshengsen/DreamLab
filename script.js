@@ -60,6 +60,10 @@ function renderGallery() {
     img.src = item.image;
     img.alt = "Preview";
 
+    img.onload = () => {
+      img.classList.add("loaded");
+    };
+
     const prompt = document.createElement("div");
     prompt.className = "prompt";
     prompt.textContent = item.prompt;
