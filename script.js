@@ -1,114 +1,73 @@
-let allData = [];
-let filteredData = [];
-let currentPage = 1;
-const itemsPerPage = 50;
-let categories = new Set();
+let data = [];
 
-// 加载数据
 async function fetchData() {
-  const response = await fetch('data.json');
-  allData = await response.json();
-  allData.forEach(item => {
-    if (item.category) {
-      categories.add(item.category);
-    }
-  });
-  filteredData = allData;
-  renderCategories();
-  render();
-}
-
-function render() {
-  const gallery = document.getElementById('gallery');
-  gallery.innerHTML = '';
-
-  const start = (currentPage - 1) * itemsPerPage;
-  const end = start + itemsPerPage;
-  const pageData = filteredData.slice(start, end);
-
-  pageData.forEach(item => {
-    const card = document.createElement('div');
-    card.className = 'card';
-
-    card.innerHTML = `
-      <img src="${item.image}" alt="案例图片">
-      <div class="prompt-container">
-        <span class="toggle-btn">展开提示词</span>
-        <div class="prompt-text">${item.prompt}</div>
-      </div>
-    `;
-
-    gallery.appendChild(card);
-  });
-
-  renderPagination();
-  setupToggleButtons();
-}
-
-function renderPagination() {
-  const pagination = document.getElementById('pagination');
-  pagination.innerHTML = '';
-
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-
-  for (let i = 1; i <= totalPages; i++) {
-    const btn = document.createElement('span');
-    btn.className = 'page-btn' + (i === currentPage ? ' active' : '');
-    btn.textContent = i;
-    btn.onclick = () => {
-      currentPage = i;
-      render();
-      window.scrollTo(0, 0);
-    };
-    pagination.appendChild(btn);
-  }
-}
-
-function setupToggleButtons() {
-  document.querySelectorAll('.toggle-btn').forEach(btn => {
-    btn.onclick = () => {
-      const prompt = btn.nextElementSibling;
-      if (prompt.style.display === 'block') {
-        prompt.style.display = 'none';
-        btn.textContent = '展开提示词';
-      } else {
-        prompt.style.display = 'block';
-        btn.textContent = '收起提示词';
-      }
-    };
-  });
+    const response = await fetch('data.json');
+    data = await response.json();
+    renderCategories();
+    renderGallery();
 }
 
 function renderCategories() {
-  const list = document.getElementById('categoryList');
-  categories.forEach(cat => {
-    const li = document.createElement('li');
-    li.textContent = cat;
-    li.dataset.category = cat;
-    li.onclick = handleCategoryClick;
-    list.appendChild(li);
-  });
+    const categoryList = document.getElementById('categoryList');
+    const categories = [...new Set(data.map(item => item.category))];
+
+    const ul = document.createElement('ul');
+
+    categories.forEach(category => {
+        const li = document.createElement('li');
+        li.textContent = category;
+        li.onclick = () => filterByCategory(category);
+        ul.appendChild(li);
+    });
+
+    categoryList.appendChild(ul);
 }
 
-function handleCategoryClick(e) {
-  document.querySelectorAll('#categoryList li').forEach(li => li.classList.remove('active'));
-  e.target.classList.add('active');
+function renderGallery(filteredData = null) {
+    const gallery = document.getElementById('gallery');
+    gallery.innerHTML = '';
 
-  const selected = e.target.dataset.category;
-  if (selected === '全部') {
-    filteredData = allData;
-  } else {
-    filteredData = allData.filter(item => item.category === selected);
-  }
-  currentPage = 1;
-  render();
+    (filteredData || data).forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'card';
+
+        const img = document.createElement('img');
+        img.src = item.image;
+        img.alt = item.prompt;
+
+        const content = document.createElement('div');
+        content.className = 'card-content';
+
+        const promptText = document.createElement('div');
+        promptText.className = 'hidden';
+        promptText.textContent = item.prompt;
+
+        const button = document.createElement('button');
+        button.className = 'toggle-button';
+        button.textContent = '展开查看';
+        button.onclick = () => {
+            promptText.classList.toggle('hidden');
+            button.textContent = promptText.classList.contains('hidden') ? '展开查看' : '收起查看';
+        };
+
+        content.appendChild(button);
+        content.appendChild(promptText);
+
+        card.appendChild(img);
+        card.appendChild(content);
+        gallery.appendChild(card);
+    });
 }
 
-document.getElementById('searchInput').addEventListener('input', e => {
-  const keyword = e.target.value.trim().toLowerCase();
-  filteredData = allData.filter(item => item.prompt.toLowerCase().includes(keyword));
-  currentPage = 1;
-  render();
+function filterByCategory(category) {
+    const filtered = data.filter(item => item.category === category);
+    renderGallery(filtered);
+}
+
+document.getElementById('searchInput').addEventListener('input', (e) => {
+    const keyword = e.target.value.toLowerCase();
+    const filtered = data.filter(item => item.prompt.toLowerCase().includes(keyword));
+    renderGallery(filtered);
 });
 
 fetchData();
