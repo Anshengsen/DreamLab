@@ -2,12 +2,19 @@ let allData = [];
 let filteredData = [];
 let currentPage = 1;
 const itemsPerPage = 50;
+let categories = new Set();
 
 // 加载数据
 async function fetchData() {
   const response = await fetch('data.json');
   allData = await response.json();
+  allData.forEach(item => {
+    if (item.category) {
+      categories.add(item.category);
+    }
+  });
   filteredData = allData;
+  renderCategories();
   render();
 }
 
@@ -70,6 +77,31 @@ function setupToggleButtons() {
       }
     };
   });
+}
+
+function renderCategories() {
+  const list = document.getElementById('categoryList');
+  categories.forEach(cat => {
+    const li = document.createElement('li');
+    li.textContent = cat;
+    li.dataset.category = cat;
+    li.onclick = handleCategoryClick;
+    list.appendChild(li);
+  });
+}
+
+function handleCategoryClick(e) {
+  document.querySelectorAll('#categoryList li').forEach(li => li.classList.remove('active'));
+  e.target.classList.add('active');
+
+  const selected = e.target.dataset.category;
+  if (selected === '全部') {
+    filteredData = allData;
+  } else {
+    filteredData = allData.filter(item => item.category === selected);
+  }
+  currentPage = 1;
+  render();
 }
 
 document.getElementById('searchInput').addEventListener('input', e => {
