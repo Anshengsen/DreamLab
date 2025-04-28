@@ -76,8 +76,8 @@ function renderGallery() {
     };
 
     card.appendChild(img);
-    card.appendChild(prompt);
     card.appendChild(expandBtn);
+    card.appendChild(prompt);
     gallery.appendChild(card);
   });
 }
