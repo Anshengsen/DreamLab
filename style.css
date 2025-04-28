@@ -5,9 +5,24 @@ body {
   color: #333;
 }
 
+header {
+  padding: 10px 20px;
+  background: #fff;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+#search-input {
+  width: 100%;
+  max-width: 600px;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
 .container {
   display: flex;
-  height: 100vh;
+  min-height: calc(100vh - 60px);
 }
 
 .sidebar {
@@ -36,29 +51,27 @@ body {
   transition: background 0.2s;
 }
 
-.sidebar li:hover,
-.sidebar li.active {
+.sidebar li:hover, .sidebar li.active {
   background-color: #e8e8e8;
 }
 
 .gallery {
   flex: 1;
   padding: 20px;
-  overflow-y: auto;
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-  justify-content: flex-start;
+  justify-content: center;
 }
 
 .card {
-  width: 360px;
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  width: 300px;
 }
 
 .card img {
@@ -67,9 +80,61 @@ body {
   object-fit: cover;
 }
 
-.card .prompt {
+.prompt {
   padding: 10px 15px;
   font-size: 14px;
   color: #555;
   white-space: pre-wrap;
+  max-height: 100px;
+  overflow: hidden;
+  position: relative;
+}
+
+.prompt.expanded {
+  max-height: none;
+}
+
+.expand-btn {
+  background: none;
+  border: none;
+  color: #007bff;
+  font-size: 14px;
+  cursor: pointer;
+  margin: 5px 15px 10px;
+  text-align: left;
+}
+
+.pagination {
+  text-align: center;
+  padding: 20px;
+}
+
+.page-btn {
+  margin: 0 5px;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  background: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.page-btn.active {
+  background: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  .gallery {
+    justify-content: center;
+  }
 }
