@@ -1,73 +1,46 @@
-let data = [];
+// 加载数据
+async function loadCases() {
+  const response = await fetch('data.json');
+  const data = await response.json();
 
-async function fetchData() {
-    const response = await fetch('data.json');
-    data = await response.json();
-    renderCategories();
-    renderGallery();
-}
+  const gallery = document.getElementById('gallery');
+  gallery.innerHTML = '';
 
-function renderCategories() {
-    const categoryList = document.getElementById('categoryList');
-    const categories = [...new Set(data.map(item => item.category))];
+  data.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'card';
 
-    const ul = document.createElement('ul');
+    const img = document.createElement('img');
+    img.src = item.image; // 这里的路径是webp格式！
 
-    categories.forEach(category => {
-        const li = document.createElement('li');
-        li.textContent = category;
-        li.onclick = () => filterByCategory(category);
-        ul.appendChild(li);
+    const content = document.createElement('div');
+    content.className = 'card-content';
+
+    const btn = document.createElement('button');
+    btn.className = 'expand-btn';
+    btn.textContent = '展开查看';
+
+    let expanded = false;
+    btn.addEventListener('click', () => {
+      expanded = !expanded;
+      if (expanded) {
+        btn.textContent = item.prompt;
+      } else {
+        btn.textContent = '展开查看';
+      }
     });
 
-    categoryList.appendChild(ul);
+    content.appendChild(btn);
+    card.appendChild(img);
+    card.appendChild(content);
+    gallery.appendChild(card);
+  });
 }
 
-function renderGallery(filteredData = null) {
-    const gallery = document.getElementById('gallery');
-    gallery.innerHTML = '';
+loadCases();
 
-    (filteredData || data).forEach(item => {
-        const card = document.createElement('div');
-        card.className = 'card';
-
-        const img = document.createElement('img');
-        img.src = item.image;
-        img.alt = item.prompt;
-
-        const content = document.createElement('div');
-        content.className = 'card-content';
-
-        const promptText = document.createElement('div');
-        promptText.className = 'hidden';
-        promptText.textContent = item.prompt;
-
-        const button = document.createElement('button');
-        button.className = 'toggle-button';
-        button.textContent = '展开查看';
-        button.onclick = () => {
-            promptText.classList.toggle('hidden');
-            button.textContent = promptText.classList.contains('hidden') ? '展开查看' : '收起查看';
-        };
-
-        content.appendChild(button);
-        content.appendChild(promptText);
-
-        card.appendChild(img);
-        card.appendChild(content);
-        gallery.appendChild(card);
-    });
-}
-
-function filterByCategory(category) {
-    const filtered = data.filter(item => item.category === category);
-    renderGallery(filtered);
-}
-
-document.getElementById('searchInput').addEventListener('input', (e) => {
-    const keyword = e.target.value.toLowerCase();
-    const filtered = data.filter(item => item.prompt.toLowerCase().includes(keyword));
-    renderGallery(filtered);
+// 主题切换
+const themeToggle = document.getElementById('theme-toggle');
+themeToggle.addEventListener('click', () => {
+  document.body.classList.toggle('dark');
 });
-
-fetchData();
