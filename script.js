@@ -1,9 +1,11 @@
 let currentPage = 1;
 const itemsPerPage = 50;
+let fullData = [];
 
 async function loadData() {
   const res = await fetch("data.json");
   const data = await res.json();
+  fullData = data;
   return data;
 }
 
@@ -34,7 +36,11 @@ function renderSidebar(data) {
       const item = document.createElement("div");
       item.className = "subcategory";
       item.textContent = sub;
-      item.onclick = () => renderMain(data.filter(d => d.image.includes(`/${category}/${sub}/`)));
+      item.onclick = () => {
+        currentPage = 1;
+        const filtered = fullData.filter(d => d.image.includes(`${category}/${sub}`));
+        renderMain(filtered);
+      };
       list.appendChild(item);
     });
 
@@ -78,17 +84,20 @@ function renderMain(data) {
     main.appendChild(card);
   });
 
-  renderPagination(data.length);
+  renderPagination(data);
 }
 
-function renderPagination(totalItems) {
+function renderPagination(data) {
   const pagination = document.getElementById("pagination");
   pagination.innerHTML = "";
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const totalPages = Math.ceil(data.length / itemsPerPage);
 
   for (let i = 1; i <= totalPages; i++) {
     const button = document.createElement("button");
     button.textContent = i;
+    if (i === currentPage) {
+      button.style.fontWeight = "bold";
+    }
     button.onclick = () => {
       currentPage = i;
       renderMain(data);
@@ -102,6 +111,7 @@ function setupSearch(data) {
   searchInput.addEventListener("input", () => {
     const keyword = searchInput.value.trim().toLowerCase();
     const results = data.filter(item => item.prompt.toLowerCase().includes(keyword));
+    currentPage = 1;
     renderMain(results);
   });
 }
