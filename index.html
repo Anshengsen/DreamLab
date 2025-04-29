@@ -1,37 +1,32 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>DreamLab-造梦实验室</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DreamLab - 造梦实验室</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <header class="navbar">
+    <div class="logo-title">
+      <img src="logo.svg" alt="DreamLab Logo" class="logo" />
+      <h1>DreamLab - 造梦实验室</h1>
+    </div>
+    <input id="search" class="search-box" placeholder="搜索提示词..." />
+    <button id="theme-toggle" class="theme-toggle">☀️/🌙</button>
+  </header>
 
-<header class="navbar">
-  <div class="logo-title">
-    <img src="logo.svg" alt="DreamLab Logo" class="logo">
-    <h1>DreamLab-造梦实验室</h1>
+  <div class="container">
+    <aside class="sidebar" id="sidebar"></aside>
+    <main class="main-content" id="main"></main>
   </div>
-<input id="search" class="search-box" placeholder="搜索提示词..." />
-  <button id="theme-toggle" class="theme-toggle">☀️/🌙</button>
-</header>
 
-<aside class="sidebar" id="sidebar">
-  <!-- 分类导航由 script.js 自动生成 -->
-</aside>
+  <div class="pagination" id="pagination"></div>
 
-<main class="gallery" id="gallery">
-  <!-- 页面加载时不显示任何卡片，待分类点击后再加载 -->
-</main>
+  <div class="footer">
+    <p>Copyright © 2023 - 2025 DreamLab. All Rights Reserved. 本站所有内容未经授权许可，不得商用。<br>Ai数字绘画馆与DreamLab/造梦实验室均为我们独立运营。<br>商务合作：1938606725@qq.com ｜ 技术支持：403438119@qq.com ｜ 法务支持：ayao989898@163.com</p>
+  </div>
 
-<div class="pagination" id="pagination"></div>
-
-<footer class="footer">
-  Copyright © 2023 - 2025 DreamLab. All Rights Reserved. 本站所有内容未经授权许可，不得商用。<br>Ai数字绘画馆与DreamLab/造梦实验室均为我们独立运营。<br>
-  商务合作：1938606725@qq.com ｜ 技术支持：403438119@qq.com ｜ 法务支持：ayao989898@163.com
-</footer>
-
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
