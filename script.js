@@ -1,49 +1,45 @@
-let allData = [];
 let currentPage = 1;
 const itemsPerPage = 50;
-let currentFilter = () => false; // 默认不展示任何内容
-let currentSearch = "";
 
-async function fetchData() {
+async function loadData() {
   const res = await fetch("data.json");
-  allData = await res.json();
-  renderSidebar();
+  const data = await res.json();
+  return data;
 }
 
-function renderSidebar() {
+function renderSidebar(data) {
   const sidebar = document.getElementById("sidebar");
-  const categoryMap = {};
+  const categories = {};
 
-  allData.forEach(item => {
-    const parts = item.image.split('/');
-    const cat = parts[1] || "未分类";
-    const subcat = parts[2] || "默认";
-    if (!categoryMap[cat]) categoryMap[cat] = new Set();
-    categoryMap[cat].add(subcat);
+  data.forEach(item => {
+    const parts = item.image.split("/");
+    if (parts.length < 3) return;
+
+    const category = parts[1];
+    const subcategory = parts[2];
+
+    if (!categories[category]) categories[category] = new Set();
+    categories[category].add(subcategory);
   });
 
-  sidebar.innerHTML = '';
-  for (const [cat, subcats] of Object.entries(categoryMap)) {
+  for (const [category, subcategories] of Object.entries(categories)) {
     const header = document.createElement("div");
     header.className = "category-header";
-    header.textContent = cat;
-    header.addEventListener("click", () => {
-      list.classList.toggle("show");
-    });
+    header.textContent = category;
 
     const list = document.createElement("div");
     list.className = "subcategory-list";
 
-    subcats.forEach(sub => {
-      const subItem = document.createElement("div");
-      subItem.className = "subcategory";
-      subItem.textContent = sub;
-      subItem.addEventListener("click", () => {
-        currentFilter = item => item.image.includes(`${cat}/${sub}`);
-        currentPage = 1;
-        renderGallery();
-      });
-      list.appendChild(subItem);
+    subcategories.forEach(sub => {
+      const item = document.createElement("div");
+      item.className = "subcategory";
+      item.textContent = sub;
+      item.onclick = () => renderMain(data.filter(d => d.image.includes(`/${category}/${sub}/`)));
+      list.appendChild(item);
+    });
+
+    header.addEventListener("click", () => {
+      list.classList.toggle("show");
     });
 
     sidebar.appendChild(header);
@@ -51,69 +47,76 @@ function renderSidebar() {
   }
 }
 
-function renderGallery() {
-  const gallery = document.getElementById("gallery");
-  const pagination = document.getElementById("pagination");
-  gallery.innerHTML = "";
-  pagination.innerHTML = "";
+function renderMain(data) {
+  const main = document.getElementById("main");
+  main.innerHTML = "";
 
-  const filtered = allData.filter(currentFilter).filter(item =>
-    item.prompt.toLowerCase().includes(currentSearch.toLowerCase())
-  );
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedData = data.slice(startIndex, startIndex + itemsPerPage);
 
-  const pageItems = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-
-  pageItems.forEach(item => {
+  paginatedData.forEach(item => {
     const card = document.createElement("div");
     card.className = "card";
 
     const img = document.createElement("img");
     img.src = item.image;
-    img.alt = '图片加载失败';
-
-    const content = document.createElement("div");
-    content.className = "card-content";
-
-    const button = document.createElement("button");
-    button.className = "expand-btn";
-    button.textContent = "展开查看";
 
     const prompt = document.createElement("div");
-    prompt.className = "prompt hidden";
+    prompt.className = "prompt";
     prompt.textContent = item.prompt;
 
-    button.addEventListener("click", () => {
-      prompt.classList.toggle("hidden");
-    });
+    const expandButton = document.createElement("button");
+    expandButton.className = "expand-button";
+    expandButton.textContent = "展开查看";
+    expandButton.onclick = () => {
+      prompt.style.display = prompt.style.display === "none" ? "block" : "none";
+    };
 
-    content.appendChild(button);
-    content.appendChild(prompt);
     card.appendChild(img);
-    card.appendChild(content);
-    gallery.appendChild(card);
+    card.appendChild(expandButton);
+    card.appendChild(prompt);
+    main.appendChild(card);
   });
 
-  const totalPages = Math.ceil(filtered.length / itemsPerPage);
+  renderPagination(data.length);
+}
+
+function renderPagination(totalItems) {
+  const pagination = document.getElementById("pagination");
+  pagination.innerHTML = "";
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+
   for (let i = 1; i <= totalPages; i++) {
-    const btn = document.createElement("button");
-    btn.textContent = i;
-    if (i === currentPage) btn.classList.add("active");
-    btn.addEventListener("click", () => {
+    const button = document.createElement("button");
+    button.textContent = i;
+    button.onclick = () => {
       currentPage = i;
-      renderGallery();
-    });
-    pagination.appendChild(btn);
+      renderMain(data);
+    };
+    pagination.appendChild(button);
   }
 }
 
-document.getElementById("theme-toggle").addEventListener("click", () => {
-  document.body.classList.toggle("dark");
-});
+function setupSearch(data) {
+  const searchInput = document.getElementById("search");
+  searchInput.addEventListener("input", () => {
+    const keyword = searchInput.value.trim().toLowerCase();
+    const results = data.filter(item => item.prompt.toLowerCase().includes(keyword));
+    renderMain(results);
+  });
+}
 
-document.getElementById("search")?.addEventListener("input", (e) => {
-  currentSearch = e.target.value;
-  currentPage = 1;
-  renderGallery();
-});
+function setupThemeToggle() {
+  const toggle = document.getElementById("theme-toggle");
+  toggle.addEventListener("click", () => {
+    document.body.classList.toggle("dark");
+  });
+}
 
-fetchData();
+(async function init() {
+  const data = await loadData();
+  renderSidebar(data);
+  renderMain(data);
+  setupSearch(data);
+  setupThemeToggle();
+})();
