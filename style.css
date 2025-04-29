@@ -133,3 +133,38 @@ body {
   font-size: 13px;
   color: var(--text-color);
 }
+.category-group {
+  margin-bottom: 10px;
+}
+
+.category-header {
+  font-weight: bold;
+  cursor: pointer;
+  padding: 6px 0;
+  border-bottom: 1px solid #ccc;
+  transition: color 0.3s;
+}
+
+.category-header:hover {
+  color: #007BFF;
+}
+
+.category-list {
+  margin-left: 10px;
+  margin-top: 5px;
+  display: none;
+}
+
+.category-list.show {
+  display: block;
+}
+
+.category-item {
+  padding: 4px 0;
+  cursor: pointer;
+  color: var(--text-color);
+}
+
+.category-item:hover {
+  text-decoration: underline;
+}
