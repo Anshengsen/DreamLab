@@ -1,0 +1,3 @@
+CN：矢量，变形金刚，全身，胸前有红蓝配色和白色条纹，胳膊和腿上有英雄贴纸，站立姿态，纯白背景，矢量，角色插图，
+EN：Vector, Transformers, full body, red and blue color scheme and white stripes on chest, hero stickers on arms and legs, standing pose, pure white background, vector, character illustration, --q 1 --s 100 --ar 3:4 --v 6.0 
+作者：@Ai数字绘画馆，WeChat：WoDaaaaaaaa 

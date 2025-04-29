@@ -1,0 +1,3 @@
+CN：火影忍者_旋涡鸣人，黑白风格，日漫风格，锐利流畅的线条，旋涡鸣人的经典动作，嘴里叼着一根飞镖，身穿黑色长袍，背景为抽象化的橙红与黑色的过渡背景，最佳品质，8K，
+EN：Naruto_Uzumaki Naruto, black and white style, Japanese comic style, sharp and smooth lines, Uzumaki Naruto's classic moves, holding a dart in his mouth, wearing a black robe, with an abstract orange-red and black transition background, best quality, 8K, --q 1 --s 100 --ar 3:4 --niji 6 --profile v21i75s 
+作者：@Ai数字绘画馆，WeChat：WoDaaaaaaaa 

@@ -1,0 +1,3 @@
+CN：可爱，全身，<《七龙珠》>的3D形象绘画，孙悟空，chibi，高度还原，一致性，干净的背景，3D渲染，柔光，最佳品质，
+EN：Cute, full body, 3D image painting of < "Dragon Ball" >, Sun Wukong, chibi, highly restored, consistency, clean background, 3D rendering, soft light, best quality, --q 1 --s 100 --ar 3:4 --v 5.2 
+作者：@Ai数字绘画馆，WeChat：WoDaaaaaaaa 

@@ -1,0 +1,13 @@
+
+CN：马里奥穿着半透明的全息雨衣，全身，面对镜头，泡泡玛特风格，IP设计，最高质量，全息，PVC材质，梦幻般的色彩，最高质量，3D渲染，虚幻引擎，黑色背景，电影级光照，
+
+EN：Mario is wearing a translucent holographic raincoat, full body, facing the camera, POP MART style, IP design, highest quality, holographic, PVC material, fantastic colors, highest quality, 3D rendering, Unreal Engine, black background, cinematic lighting, --q 5 --s 250 --ar 3:4 --v 5.2
+
+
+
+CN：马里奥穿着半透明的全息雨衣，全身，面对镜头，泡泡玛特风格，IP设计，最高质量，全息，PVC材质，梦幻般的色彩，最高质量，3D渲染，虚幻引擎，黑色背景，电影级光照，
+
+EN：Mario is wearing a translucent holographic raincoat, full body, facing the camera, POP MART style, IP design, highest quality, holographic, PVC material, fantastic colors, highest quality, 3D rendering, Unreal Engine, black background, cinematic lighting, --q 5 --s 250 --ar 3:4 --niji 5 --style expressive
+
+ 
+作者：@Ai数字绘画馆，WeChat：WoDaaaaaaaa 

@@ -1,0 +1,3 @@
+CN：一个男孩，戴着大墨镜，肖像特写，食尸鬼朋克，露出牙齿，邪恶，中国漫画，印刷品质量，深蓝色和黄色，漫画艺术，超高质量，精致的细节处理，光泽，平滑，
+EN：A boy, wearing big sunglasses, portrait close-up, ghoul punk, bared teeth, evil, Chinese comics, print quality, dark blue and yellow, comic art, super high quality, exquisite detailing, glossy, smooth, --q 5 --s 180 --ar 3:4 --niji 5 
+作者：@Ai数字绘画馆，WeChat：WoDaaaaaaaa 

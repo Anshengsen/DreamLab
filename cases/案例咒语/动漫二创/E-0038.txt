@@ -1,0 +1,3 @@
+CN：《蜡笔小新》，独奏，居中，简单的细节，全身，锐利的线条，白色背景，
+EN："Crayon Shin-chan", solo, centered, simple details, full body, sharp lines, white background, --q 1 --s 100 --ar 1:1 --v 6.0 --style raw --no text 
+作者：@Ai数字绘画馆，WeChat：WoDaaaaaaaa 

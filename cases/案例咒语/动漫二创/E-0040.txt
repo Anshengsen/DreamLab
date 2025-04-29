@@ -1,0 +1,3 @@
+CN：《蜡笔小新》风格的人物，独奏，居中，简单的细节，全身，锐利的线条和柔和的填充色，白色背景， 
+EN："Crayon Shin-chan" style characters, solo, centered, simple details, full body, sharp lines and soft fill colors, white background, --q 1 --s 100 --ar 1:1 --v 6.0 
+作者：@Ai数字绘画馆，WeChat：WoDaaaaaaaa 

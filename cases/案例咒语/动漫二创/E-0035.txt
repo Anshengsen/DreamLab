@@ -1,0 +1,3 @@
+CN：可爱，全身，<《火影忍者-旗木卡卡西》>的3D形象绘画，高度还原，一致性，搞笑的手势，干净的背景，3D渲染，柔光，最佳品质，
+EN：Cute, full body, 3D image painting of < Naruto-Flag Kakashi >, high restoration, consistency, funny gestures, clean background, 3D rendering, soft light, best quality, --q 1 --s 50 --ar 3:4 --v 6.0 
+作者：@Ai数字绘画馆，WeChat：WoDaaaaaaaa 

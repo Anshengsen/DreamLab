@@ -1,0 +1,4 @@
+
+CN：一个手持刀片战斗的人物，风格有彩色爆炸、天蓝色、动漫艺术、发光肖像、强烈的面部表情、32K、UHD、流畅的笔法，
+EN：A figure fighting with a blade in the style of colorful explosion, sky blue, anime art, luminous portraits, strong facial expressions, 32K, UHD, smooth brushwork, --q 1 --s 100 --ar 3:4 --niji 5 
+作者：@Ai数字绘画馆，WeChat：WoDaaaaaaaa 
