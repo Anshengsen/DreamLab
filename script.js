@@ -1,20 +1,20 @@
 let allData = [];
 let currentPage = 1;
 const itemsPerPage = 50;
+let currentFilter = () => false; // 默认不展示任何内容
+let currentSearch = "";
 
 async function fetchData() {
   const res = await fetch("data.json");
-  const data = await res.json();
-  allData = data;
-  renderSidebar(data);
-  renderPage();
+  allData = await res.json();
+  renderSidebar();
 }
 
-function renderSidebar(data) {
+function renderSidebar() {
   const sidebar = document.getElementById("sidebar");
   const categoryMap = {};
 
-  data.forEach(item => {
+  allData.forEach(item => {
     const parts = item.image.split('/');
     const cat = parts[1] || "未分类";
     const subcat = parts[2] || "默认";
@@ -23,41 +23,42 @@ function renderSidebar(data) {
   });
 
   sidebar.innerHTML = '';
-  for (const [cat, subs] of Object.entries(categoryMap)) {
-    const group = document.createElement("div");
-    group.className = "category-group";
-
+  for (const [cat, subcats] of Object.entries(categoryMap)) {
     const header = document.createElement("div");
     header.className = "category-header";
     header.textContent = cat;
     header.addEventListener("click", () => {
-      list.classList.toggle("hidden");
+      list.classList.toggle("show");
     });
 
     const list = document.createElement("div");
-    subs.forEach(sub => {
-      const item = document.createElement("div");
-      item.className = "subcategory";
-      item.textContent = sub;
-      item.addEventListener("click", () => {
+    list.className = "subcategory-list";
+
+    subcats.forEach(sub => {
+      const subItem = document.createElement("div");
+      subItem.className = "subcategory";
+      subItem.textContent = sub;
+      subItem.addEventListener("click", () => {
+        currentFilter = item => item.image.includes(`${cat}/${sub}`);
         currentPage = 1;
-        renderPage(item => item.image.includes(`${cat}/${sub}`));
+        renderGallery();
       });
-      list.appendChild(item);
+      list.appendChild(subItem);
     });
 
-    group.appendChild(header);
-    group.appendChild(list);
-    sidebar.appendChild(group);
+    sidebar.appendChild(header);
+    sidebar.appendChild(list);
   }
 }
 
-function renderPage(filterFn = () => true) {
+function renderGallery() {
   const gallery = document.getElementById("gallery");
+  const pagination = document.getElementById("pagination");
   gallery.innerHTML = "";
+  pagination.innerHTML = "";
 
-  const filtered = allData.filter(filterFn).filter(item =>
-    item.prompt.toLowerCase().includes(document.getElementById("search").value.toLowerCase())
+  const filtered = allData.filter(currentFilter).filter(item =>
+    item.prompt.toLowerCase().includes(currentSearch.toLowerCase())
   );
 
   const pageItems = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
@@ -68,56 +69,51 @@ function renderPage(filterFn = () => true) {
 
     const img = document.createElement("img");
     img.src = item.image;
+    img.alt = '图片加载失败';
 
     const content = document.createElement("div");
     content.className = "card-content";
 
-    const btn = document.createElement("button");
-    btn.className = "expand-btn";
-    btn.textContent = "展开查看";
+    const button = document.createElement("button");
+    button.className = "expand-btn";
+    button.textContent = "展开查看";
 
     const prompt = document.createElement("div");
     prompt.className = "prompt hidden";
     prompt.textContent = item.prompt;
 
-    btn.addEventListener("click", () => {
+    button.addEventListener("click", () => {
       prompt.classList.toggle("hidden");
     });
 
-    content.appendChild(btn);
+    content.appendChild(button);
     content.appendChild(prompt);
     card.appendChild(img);
     card.appendChild(content);
     gallery.appendChild(card);
   });
 
-  renderPagination(filtered.length);
-}
-
-function renderPagination(total) {
-  const pag = document.getElementById("pagination");
-  pag.innerHTML = "";
-  const totalPages = Math.ceil(total / itemsPerPage);
-
+  const totalPages = Math.ceil(filtered.length / itemsPerPage);
   for (let i = 1; i <= totalPages; i++) {
     const btn = document.createElement("button");
     btn.textContent = i;
     if (i === currentPage) btn.classList.add("active");
     btn.addEventListener("click", () => {
       currentPage = i;
-      renderPage();
+      renderGallery();
     });
-    pag.appendChild(btn);
+    pagination.appendChild(btn);
   }
 }
 
-document.getElementById("search").addEventListener("input", () => {
-  currentPage = 1;
-  renderPage();
-});
-
 document.getElementById("theme-toggle").addEventListener("click", () => {
   document.body.classList.toggle("dark");
+});
+
+document.getElementById("search")?.addEventListener("input", (e) => {
+  currentSearch = e.target.value;
+  currentPage = 1;
+  renderGallery();
 });
 
 fetchData();
