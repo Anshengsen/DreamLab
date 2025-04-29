@@ -1,105 +1,123 @@
-async function loadCases() {
-  const response = await fetch('data.json');
-  const data = await response.json();
+let allData = [];
+let currentPage = 1;
+const itemsPerPage = 50;
 
-  const gallery = document.getElementById('gallery');
-  gallery.innerHTML = '';
+async function fetchData() {
+  const res = await fetch("data.json");
+  const data = await res.json();
+  allData = data;
+  renderSidebar(data);
+  renderPage();
+}
 
-  // 分类分组
-  const categories = {};
+function renderSidebar(data) {
+  const sidebar = document.getElementById("sidebar");
+  const categoryMap = {};
+
   data.forEach(item => {
     const parts = item.image.split('/');
-    const category = parts.length > 1 ? parts[1] : '默认分类';
-    if (!categories[category]) {
-      categories[category] = [];
-    }
-    categories[category].push(item);
+    const cat = parts[1] || "未分类";
+    const subcat = parts[2] || "默认";
+    if (!categoryMap[cat]) categoryMap[cat] = new Set();
+    categoryMap[cat].add(subcat);
   });
 
-  // 生成分类栏
-  const sidebar = document.getElementById('sidebar');
   sidebar.innerHTML = '';
+  for (const [cat, subs] of Object.entries(categoryMap)) {
+    const group = document.createElement("div");
+    group.className = "category-group";
 
-  Object.entries(categories).forEach(([category, items]) => {
-    const group = document.createElement('div');
-    group.className = 'category-group';
-
-    const header = document.createElement('div');
-    header.className = 'category-header';
-    header.textContent = category;
-
-    const list = document.createElement('div');
-    list.className = 'category-list';
-
-    items.forEach(item => {
-      const itemEl = document.createElement('div');
-      itemEl.className = 'category-item';
-      itemEl.textContent = item.prompt.slice(0, 20) || '无标题';
-      itemEl.title = item.prompt;
-
-      itemEl.addEventListener('click', () => {
-        gallery.innerHTML = '';
-        const card = document.createElement('div');
-        card.className = 'card';
-
-        const img = document.createElement('img');
-        img.src = item.image;
-
-        const content = document.createElement('div');
-        content.className = 'card-content';
-
-        const btn = document.createElement('button');
-        btn.className = 'expand-btn';
-        btn.textContent = '展开查看';
-
-        let expanded = false;
-        btn.addEventListener('click', () => {
-          expanded = !expanded;
-          btn.textContent = expanded ? item.prompt : '展开查看';
-        });
-
-        content.appendChild(btn);
-        card.appendChild(img);
-        card.appendChild(content);
-        gallery.appendChild(card);
-      });
-
-      list.appendChild(itemEl);
+    const header = document.createElement("div");
+    header.className = "category-header";
+    header.textContent = cat;
+    header.addEventListener("click", () => {
+      list.classList.toggle("hidden");
     });
 
-    header.addEventListener('click', () => {
-      list.classList.toggle('show');
+    const list = document.createElement("div");
+    subs.forEach(sub => {
+      const item = document.createElement("div");
+      item.className = "subcategory";
+      item.textContent = sub;
+      item.addEventListener("click", () => {
+        currentPage = 1;
+        renderPage(item => item.image.includes(`${cat}/${sub}`));
+      });
+      list.appendChild(item);
     });
 
     group.appendChild(header);
     group.appendChild(list);
     sidebar.appendChild(group);
-  });
+  }
+}
 
-  // 默认加载全部
-  data.forEach(item => {
-    const card = document.createElement('div');
-    card.className = 'card';
+function renderPage(filterFn = () => true) {
+  const gallery = document.getElementById("gallery");
+  gallery.innerHTML = "";
 
-    const img = document.createElement('img');
+  const filtered = allData.filter(filterFn).filter(item =>
+    item.prompt.toLowerCase().includes(document.getElementById("search").value.toLowerCase())
+  );
+
+  const pageItems = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  pageItems.forEach(item => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const img = document.createElement("img");
     img.src = item.image;
 
-    const content = document.createElement('div');
-    content.className = 'card-content';
+    const content = document.createElement("div");
+    content.className = "card-content";
 
-    const btn = document.createElement('button');
-    btn.className = 'expand-btn';
-    btn.textContent = '展开查看';
+    const btn = document.createElement("button");
+    btn.className = "expand-btn";
+    btn.textContent = "展开查看";
 
-    let expanded = false;
-    btn.addEventListener('click', () => {
-      expanded = !expanded;
-      btn.textContent = expanded ? item.prompt : '展开查看';
+    const prompt = document.createElement("div");
+    prompt.className = "prompt hidden";
+    prompt.textContent = item.prompt;
+
+    btn.addEventListener("click", () => {
+      prompt.classList.toggle("hidden");
     });
 
     content.appendChild(btn);
+    content.appendChild(prompt);
     card.appendChild(img);
     card.appendChild(content);
     gallery.appendChild(card);
   });
+
+  renderPagination(filtered.length);
 }
+
+function renderPagination(total) {
+  const pag = document.getElementById("pagination");
+  pag.innerHTML = "";
+  const totalPages = Math.ceil(total / itemsPerPage);
+
+  for (let i = 1; i <= totalPages; i++) {
+    const btn = document.createElement("button");
+    btn.textContent = i;
+    if (i === currentPage) btn.classList.add("active");
+    btn.addEventListener("click", () => {
+      currentPage = i;
+      renderPage();
+    });
+    pag.appendChild(btn);
+  }
+}
+
+document.getElementById("search").addEventListener("input", () => {
+  currentPage = 1;
+  renderPage();
+});
+
+document.getElementById("theme-toggle").addEventListener("click", () => {
+  document.body.classList.toggle("dark");
+});
+
+fetchData();
