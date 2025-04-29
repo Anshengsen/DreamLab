@@ -147,9 +147,9 @@ body {
 }
 
 .footer {
-  padding: 20px;
+  padding: 24px;
   text-align: center;
-  font-size: 12px;
+  font-size: 14px;
   color: #666;
   background-color: var(--card-bg);
   border-top: 1px solid var(--card-border);
