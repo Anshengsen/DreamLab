@@ -1,6 +1,8 @@
 :root {
   --bg-color: #ffffff;
   --text-color: #333333;
+  --highlight-color: #007aff;
+  --inactive-color: #666;
   --card-bg: #f9f9f9;
   --card-border: #ddd;
 }
@@ -8,6 +10,8 @@
 body.dark {
   --bg-color: #1e1e1e;
   --text-color: #eeeeee;
+  --highlight-color: #00bfff;
+  --inactive-color: #aaa;
   --card-bg: #2e2e2e;
   --card-border: #444;
 }
@@ -85,9 +89,14 @@ body {
 
 .subcategory {
   font-size: 14px;
-  color: #666;
+  color: var(--inactive-color);
   margin: 4px 0;
   cursor: pointer;
+}
+
+.subcategory.active {
+  font-weight: bold;
+  color: var(--highlight-color);
 }
 
 .main-content {
@@ -144,6 +153,13 @@ body {
   border: 1px solid #ccc;
   background-color: var(--card-bg);
   border-radius: 6px;
+  color: var(--inactive-color);
+}
+
+.pagination button.active {
+  font-weight: bold;
+  background-color: var(--highlight-color);
+  color: white;
 }
 
 .footer {
