@@ -1,11 +1,14 @@
 let currentPage = 1;
 const itemsPerPage = 50;
 let fullData = [];
+let currentSubcategory = null;
+let currentFilteredData = [];
 
 async function loadData() {
   const res = await fetch("data.json");
   const data = await res.json();
   fullData = data;
+  currentFilteredData = data;
   return data;
 }
 
@@ -37,9 +40,12 @@ function renderSidebar(data) {
       item.className = "subcategory";
       item.textContent = sub;
       item.onclick = () => {
+        document.querySelectorAll(".subcategory").forEach(el => el.classList.remove("active"));
+        item.classList.add("active");
         currentPage = 1;
-        const filtered = fullData.filter(d => d.image.includes(`${category}/${sub}`));
-        renderMain(filtered);
+        currentSubcategory = sub;
+        currentFilteredData = fullData.filter(d => d.image.includes(`${category}/${sub}`));
+        renderMain(currentFilteredData);
       };
       list.appendChild(item);
     });
@@ -96,7 +102,7 @@ function renderPagination(data) {
     const button = document.createElement("button");
     button.textContent = i;
     if (i === currentPage) {
-      button.style.fontWeight = "bold";
+      button.classList.add("active");
     }
     button.onclick = () => {
       currentPage = i;
@@ -112,15 +118,28 @@ function setupSearch(data) {
     const keyword = searchInput.value.trim().toLowerCase();
     const results = data.filter(item => item.prompt.toLowerCase().includes(keyword));
     currentPage = 1;
+    currentSubcategory = null;
+    document.querySelectorAll(".subcategory").forEach(el => el.classList.remove("active"));
+    currentFilteredData = results;
     renderMain(results);
   });
 }
 
 function setupThemeToggle() {
   const toggle = document.getElementById("theme-toggle");
+  const logo = document.getElementById("logo-img");
+
+  function updateLogo() {
+    logo.src = document.body.classList.contains("dark") ? "logo-dark.svg" : "logo-light.svg";
+  }
+
   toggle.addEventListener("click", () => {
     document.body.classList.toggle("dark");
+    updateLogo();
   });
+
+  // 初始设置
+  updateLogo();
 }
 
 (async function init() {
