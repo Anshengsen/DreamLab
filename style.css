@@ -162,11 +162,84 @@ body {
   color: white;
 }
 
+/* 新增容器，包裹 footer + sponsor */
+.footer-container {
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  border-top: 1px solid var(--card-border);
+}
+
+/* 版权区 */
 .footer {
   padding: 26px;
   text-align: center;
   font-size: 14px;
-  color: #666;
-  background-color: var(--card-bg);
-  border-top: 1px solid var(--card-border);
+}
+
+/* 赞助区 */
+.sponsor {
+  margin-top: 0;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 20px;
+}
+
+.sponsor img {
+  height: 32px;
+  width: auto;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.sponsor img:hover {
+  transform: scale(1.1);
+}
+
+.wechat-container {
+  position: relative;
+  display: inline-block;
+}
+
+.wechat-tooltip {
+  display: none;
+  position: absolute;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 6px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+}
+
+.wechat-tooltip img {
+  height: 160px;
+  width: auto;
+  display: block;
+}
+
+.wechat-container:hover .wechat-tooltip {
+  display: block;
+}
+
+@media (prefers-color-scheme: dark) {
+  .wechat-tooltip {
+    background-color: #1e1e1e;
+    border: 1px solid #444;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  }
+
+  .wechat-tooltip img {
+    border: 1px solid #444;
+  }
+
+  .sponsor span {
+    color: #ddd;
+  }
 }
